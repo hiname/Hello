@@ -137,6 +137,7 @@ public abstract class Char implements CharAction {
 				breakTime();
 			}
 		}
+		sc.close();
 	}
 
 	@Override
@@ -224,6 +225,7 @@ public abstract class Char implements CharAction {
 			if (!battling || isDie)
 				break;
 		}
+		sc.close();
 
 		// 전투 종료 / 승리 메세지, 경험치 체크
 		if (target.isDie)
@@ -480,6 +482,7 @@ public abstract class Char implements CharAction {
 				e.printStackTrace();
 			}
 		}
+		sc.close();
 	}
 	
 	public void skill1(Char target){}

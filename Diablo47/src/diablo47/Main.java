@@ -2,7 +2,7 @@ package diablo47;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import diablo47.characters.Amazone;
+import diablo47.characters.Amazon;
 import diablo47.characters.Char;
 import diablo47.characters.Healer;
 import diablo47.characters.Hunter;
@@ -23,7 +23,7 @@ public class Main{
 		charList[1] = new Healer();
 		charList[2] = new Warrior();
 		charList[3] = new Mage();
-		charList[4] = new Amazone();
+		charList[4] = new Amazon();
 		Scanner sc = new Scanner(System.in);
 		int selNum = -1;
 		while (true) {
@@ -45,6 +45,7 @@ public class Main{
 		}
 		System.out.println("아이디를 입력하세요.");
 		selChar.setId(sc.next());
+		sc.close();
 		System.out.println();
 		selChar.start();
 	}

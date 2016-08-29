@@ -1,9 +1,9 @@
 package diablo47.characters;
 
 
-public class Amazone extends Char {
+public class Amazon extends Char {
 	
-	public Amazone() {
+	public Amazon() {
 		init();
 	}
 
