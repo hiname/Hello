@@ -27,6 +27,7 @@ public class Warrior extends Char {
 		
 		skillNames = new String[]{"함성", "HOT강타", "초콜렛복근", "옷벗기기", "버서커모드"};
 		skillNeedSps = new int[]{10, 15, 25, 30, 80};
+		afterInit();
 	}
 
 	@Override // 함성

@@ -27,6 +27,7 @@ public class Hunter extends Char {
 		
 		skillNames = new String[] { "적 공격력 낮추기", "적 방어력 낮추기", "회복", "적 공업 방다", "확률 하르마게돈" };
 		skillNeedSps = new int[]{10, 10, 30, 20, 80};
+		afterInit();
 		// 공격 / 방어 / 스킬
 		// 				 -> 스킬1 - 스킬5
 	}

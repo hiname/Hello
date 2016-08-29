@@ -27,6 +27,7 @@ public class Healer extends Char {
 		
 		skillNames = new String[]{"메스힐", "마인드컨트롤", "큐어", "수호", "신의은총"};
 		skillNeedSps = new int[]{10, 15, 20, 15, 40};
+		afterInit();
 	}
 	
 	@Override // 메스힐

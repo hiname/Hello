@@ -57,6 +57,8 @@ public abstract class Char implements CharAction {
 	boolean			isDie;
 	boolean			battling;
 
+	public static final Scanner sc = new Scanner(System.in);
+	
 	@Override
 	public void init(){
 		cls = "무직";
@@ -68,30 +70,41 @@ public abstract class Char implements CharAction {
 		addNeedExp = 10;
 		inflationAddNeedExp = 5;
 		
-		atkRng = defaultAtk;
-		defRng = defaultDef;
-		addDoDef = defaultDef;
-		
+	}
+	
+	public void afterInit(){
+		atkRng = (int) (defaultAtk * 0.3);
+		defRng = (int) (defaultDef * 0.3);
+		addDoDef = (int) (defaultDef * 0.3);
 	}
 	
 	public void sleep(long mills) {
 		try {
-			Thread.sleep(mills + 1000);
+			Thread.sleep(mills + 200);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void printStat() {
+	public void printStat(String[] a) {
 		System.out.print(
-			"Class : " + cls + "\n"
-			+ "LV : " + level + "\n"
-			+ "ATK : " + atk + "\n"
-			+ "DEF : " + def + "\n"
-			+ "HP : " + hp + "\n"
-			+ "MP : " + sp + "\n"
-			+ "EXP : " + exp + "\n"
+			"Class : " + cls + a[0] + "\n"
+			+ "LV : " + level + a[1] + "\n"
+			+ "ATK : " + atk + a[2] + "\n"
+			+ "DEF : " + def + a[3] + "\n"
+			+ "HP : " + hp + a[4] + "\n"
+			+ "SP : " + sp + a[5] + "\n"
+			+ "EXP : " + exp + a[6] + "\n"
 			);
+	}
+	private String[] nulls = new String[]{"","","","","","",""};
+	
+	private String[] statAdd = new String[]{"","","","","","",""};
+	
+	public void printStat() {
+		printStat(statAdd);
+		if(statAdd[2] != "")
+			System.arraycopy(nulls, 0, statAdd, 0, nulls.length);
 	}
 
 	public void setId(String id) {
@@ -124,7 +137,6 @@ public abstract class Char implements CharAction {
 	@Override
 	public void start() {
 		printStat();
-		Scanner sc = new Scanner(System.in);
 		while (true) {
 			System.out.println("행동\n1:모험 2: 휴식");
 			int selAction = sc.nextInt();
@@ -137,7 +149,6 @@ public abstract class Char implements CharAction {
 				breakTime();
 			}
 		}
-		sc.close();
 	}
 
 	@Override
@@ -169,8 +180,7 @@ public abstract class Char implements CharAction {
 
 		System.out.println(id + "은(는) " + restHp + "의 HP를 회복하였다.");
 		printStat();
-		ani.setUserHp(hp, maxHp);
-		ani.printUserHp();
+		ani.printHp(id + "HP : ", hp, maxHp);
 	}
 
 	public void battle(Char target) {
@@ -178,7 +188,6 @@ public abstract class Char implements CharAction {
 		ani.setUserHp(hp, maxHp);
 		ani.rndMonAndHp();
 		//
-		Scanner sc = new Scanner(System.in);
 		System.out.println();
 		System.out.println(target.id + "와(과) 전투가 시작됐다.");
 		sleep(300);
@@ -197,6 +206,11 @@ public abstract class Char implements CharAction {
 			
 			// System.out.println("userIsSel : " + userIsSel);			
 			
+			if (!autoBattle && userIsSel == 4) {
+				autoBattle = true;
+				userIsSel = autoSelection(target);
+			} 
+			
 			if (userIsSel == 1) {
 				doAttack(target);
 			} else if (userIsSel == 2) {
@@ -204,7 +218,6 @@ public abstract class Char implements CharAction {
 			} else if (userIsSel == 3) {
 				doSkill(target, -1);
 			} else if (userIsSel > 3) {
-				autoBattle = true;
 				doSkill(target, userIsSel - 3);
 			}
 
@@ -225,12 +238,12 @@ public abstract class Char implements CharAction {
 			if (!battling || isDie)
 				break;
 		}
-		sc.close();
 
 		// 전투 종료 / 승리 메세지, 경험치 체크
 		if (target.isDie)
 			addExp(target.exp);
 		printStat();
+		initBattle();
 	}
 	
 	public void initBattle(){
@@ -271,15 +284,14 @@ public abstract class Char implements CharAction {
 		level++;
 		atk = (defaultAtk += lvUpAtk);
 		def = (defaultDef += lvUpDef);
-		hp = (maxHp += lvUpHp);
-		sp = (maxSp += lvUpSp);
+		hp = maxHp = (defaultMaxHp += lvUpHp);
+		sp = maxSp = (defaultMaxSp += lvUpSp);
 		System.out.println("레벨업!");
-		System.out.println(
-			"공격력 : " + atk + "(+" + lvUpAtk + ")\n"
-			+ "방어력 : " + def + "(+" + lvUpDef + ")\n"
-			+ "HP : " + hp + "(+" + lvUpHp + ")\n"
-			+ "SP : " + sp + "(+" + lvUpSp + ")\n"
-			);
+		statAdd[2] = "(+" + lvUpAtk + ")";
+		statAdd[3] = "(+" + lvUpDef + ")";
+		statAdd[4] = "(+" + lvUpHp + ")";
+		statAdd[5] = "(+" + lvUpSp + ")";
+		
 		sleep(3000);
 	}
 
@@ -317,8 +329,7 @@ public abstract class Char implements CharAction {
 		if (hp <= 0) hp = 0;
 		
 		System.out.println(id + "은(는) " + def + "의 방어로 " + dmg + "의 데미지를 입었다!");
-		ani.setUserHp(hp, maxHp);
-		ani.printHp(id + " : ", ani.userHpGauge);
+		ani.printHp(id + "HP : ", hp, maxHp);
 		System.out.println();
 		sleep(500);
 		chkThisDie();
@@ -335,8 +346,8 @@ public abstract class Char implements CharAction {
 	public void buffAtk(int value){
 		atk += value;
 		System.out.println(id + "의 공격력 " 
-			+ ((value < 0) ? "감소" : "증가") 
-			+ "(" + value + ") = > 현재 : " + atk);
+			+ ((value < 0) ? "감소(" : "증가(+") 
+			+ value + ") = > 현재 : " + atk);
 		
 		sleep(250);
 	}
@@ -344,8 +355,8 @@ public abstract class Char implements CharAction {
 	public void buffDef(int value){
 		def += value;
 		System.out.println(id + "의 방어력 " 
-						+ ((value < 0) ? "감소" : "증가") 
-						+ "(" + value + ") = > 현재 : " + def);
+			+ ((value < 0) ? "감소(" : "증가(+") 
+			+ value + ") = > 현재 : " + def);
 		
 		sleep(250);
 	}
@@ -353,8 +364,8 @@ public abstract class Char implements CharAction {
 	public void buffMaxHp(int value){
 		maxHp += value;
 		System.out.println(id + "의 최대체력 " 
-			+ ((value < 0) ? "감소" : "증가") 
-			+ "(" + value + ") = > 현재 : " + maxHp);
+			+ ((value < 0) ? "감소(" : "증가(+") 
+			+ value + ") = > 현재 : " + maxHp);
 		
 		sleep(250);
 	}
@@ -362,8 +373,8 @@ public abstract class Char implements CharAction {
 	public void buffMaxSp(int value){
 		maxSp += value;
 		System.out.println(id + "의 최대마나 " 
-			+ ((value < 0) ? "감소" : "증가") 
-			+ "(" + value + ") = > 현재 : " + maxSp);
+			+ ((value < 0) ? "감소(" : "증가(+") 
+			+ value + ") = > 현재 : " + maxSp);
 		
 		sleep(250);
 	}
@@ -376,8 +387,8 @@ public abstract class Char implements CharAction {
 		}
 		
 		System.out.println(id + "의 HP " 
-			+ ((value < 0) ? "감소" : "회복") 
-			+ "(" + value + ") = > 현재 : " + hp);
+			+ ((value < 0) ? "감소(" : "회복(+") 
+			+ value + ") = > 현재 : " + hp);
 		
 		sleep(250);
 	}
@@ -446,7 +457,6 @@ public abstract class Char implements CharAction {
 			return;
 		}
 		
-		Scanner sc = new Scanner(System.in);
 		while (true) {
 			try {
 				if(selection == -1){ // 사용자에게 입력 받기
@@ -454,8 +464,8 @@ public abstract class Char implements CharAction {
 						System.out.print((i + 1) + "." + skillNames[i] + " ");
 					selection = Integer.parseInt(sc.next());
 				}
-				System.out.println((selection) + "." + skillNames[selection - 1] + "!");
-				sleep(500);
+				System.out.println(id + "은(는) " + skillNames[selection - 1] + "! 을(를) 사용했다.");
+				sleep(1000);
 				
 				if(sp < skillNeedSps[selection - 1]) {
 					System.out.println("SP 부족, " + skillNeedSps[selection - 1] + "의 SP가 필요합니다.");
@@ -475,14 +485,15 @@ public abstract class Char implements CharAction {
 						throw new InputMismatchException();
 					}
 				}
+				ani.printSp(id + "SP : ", sp, maxSp);
 				sleep(500);
 				break;
 			} catch (Exception e) {
 				System.out.println("잘못 입력 하였습니다.");
 				e.printStackTrace();
 			}
+			
 		}
-		sc.close();
 	}
 	
 	public void skill1(Char target){}

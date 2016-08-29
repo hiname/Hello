@@ -27,6 +27,7 @@ public class Mon extends Char {
 		
 		skillNames = new String[]{"다리걸기"};
 		skillNeedSps = new int[]{10};
+		afterInit();
 	}
 
 	@Override
@@ -36,7 +37,7 @@ public class Mon extends Char {
 
 	@Override
 	public void skill1(Char target){
-		target.buffDef(-10);
+		target.buffDef(-2);
 	}
 
 	@Override

@@ -113,9 +113,9 @@ public class Ani{
 			canvas[rowCen + 1][colCen + 1] = 1;
 			clearConsole();
 			printCanvas();
-			printMonHp();
+			printHp("ＭＯＮ＿ＨＰ", monHp, monMaxHp);
 			System.out.println();
-			printUserHp();
+			printHp("ＭＹ＿＿ＨＰ", userHp, userMaxHp);
 			sleep(500);
 			clearCanvas();
 		}
@@ -140,31 +140,33 @@ public class Ani{
 		userHpGauge = (int)(calcHp);
 		userHpGauge = (userHpGauge <= 0 && 0 < calcHp) ? 1 : userHpGauge; 
 	}
-	
-	public int getUserHp(){
-		return userHpGauge;
-	}
-	
-	public void printMonHp(){
-		System.out.println("체력상태 : " + monHp + "/" + monMaxHp);
-		printHp("ＭＯＮ＿ＨＰ", monHpGauge);
-	}
 
-	public void printUserHp(){
-		System.out.println("체력상태 : " + userHp + "/" + userMaxHp);
-		printHp("ＭＹ＿＿ＨＰ", userHpGauge);
+	public int calcHpGauge(int hp, int maxHp){
+		float calcHp = ((float)hp / maxHp * 10);
+		int hpGauge = (int)(calcHp);
+		hpGauge = (hpGauge <= 0 && 0 < calcHp) ? 1 : hpGauge;
+		return hpGauge;
 	}
 	
-	public void printHp(String label, int gauge){
-		
+	public void printHp(String label, int hp, int maxHp){
+		printGauge(label, hp, maxHp, '■');
+	}
+	
+	public void printSp(String label, int sp, int maxSp){
+		printGauge(label, sp, maxSp, '▦');
+	}
+	
+	public void printGauge(String label, int hp, int maxHp, char box){
+		int hpGauge = calcHpGauge(hp, maxHp);
 		String gaugePrint = "";
 		for (int i = 0; i < 10; i++) {
-			if (i < gauge)
-				gaugePrint += "■";
+			if (i < hpGauge)
+				gaugePrint += box;
 			else
-				gaugePrint += "□";
+				gaugePrint += '□';
 		}
 		System.out.println(label + gaugePrint);
+		System.out.println("　　　　　　　" + hp + "/" + maxHp);
 	}
 	
 	public void cross(){

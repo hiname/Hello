@@ -27,6 +27,7 @@ public class Mage extends Char {
 		
 		skillNames = new String[]{"파이어볼", "아이스볼", "라이트닝", "퍼지", "메테오"};
 		skillNeedSps = new int[]{10, 15, 20, 15, 40};
+		afterInit();
 	}
 
 	@Override // 파이어볼 : 80%로 2회 타격
@@ -64,7 +65,7 @@ public class Mage extends Char {
 		int tmpAtk = atk;
 		int tmpDef = target.def;
 		buffAtk((int)(atk * 0.5));
-		target.buffDef((int)(atk * 0.5));
+		target.buffDef(-(int)(atk * 0.5));
 		doAttack(target);
 		atk = tmpAtk;
 		target.def = tmpDef;

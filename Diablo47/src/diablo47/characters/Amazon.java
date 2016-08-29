@@ -27,6 +27,8 @@ public class Amazon extends Char {
 		
 		skillNames = new String[]{"멀티샷", "포이즌샷", "파이어샷"};
 		skillNeedSps = new int[]{20,20,30};
+		
+		afterInit();
 	}
 
 	@Override // 멀티샷

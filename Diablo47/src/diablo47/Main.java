@@ -1,4 +1,5 @@
 package diablo47;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -18,26 +19,26 @@ public class Main{
 	}
 	
 	public void main2(){
-		Char[] charList = new Char[5];
-		charList[0] = new Hunter();
-		charList[1] = new Healer();
-		charList[2] = new Warrior();
-		charList[3] = new Mage();
-		charList[4] = new Amazon();
+		ArrayList<Char> charList = new ArrayList<Char>();
+		charList.add(new Hunter());
+		charList.add(new Healer());
+		charList.add(new Warrior());
+		charList.add(new Mage());
+		charList.add(new Amazon());
 		Scanner sc = new Scanner(System.in);
 		int selNum = -1;
 		while (true) {
 			System.out.println("캐릭터를 선택하세요.");
-			System.out.print("1." + charList[0].getCls());
-			for (int i = 1; i < charList.length; i++) {
-				System.out.print(" " + (i + 1) + "." + charList[i].getCls());
+			System.out.print("1." + charList.get(0).getCls());
+			for (int i = 1; i < charList.size(); i++) {
+				System.out.print(" " + (i + 1) + "." + charList.get(i).getCls());
 			}
 			System.out.println();
 			try {
 				selNum = Integer.parseInt(sc.next());
-				if (selNum < 1 || charList.length < selNum) 
+				if (selNum < 1 || charList.size() < selNum) 
 					throw new InputMismatchException();
-				selChar = charList[selNum - 1];
+				selChar = charList.get(selNum - 1);
 				break;
 			} catch (Exception e) {
 				System.out.println("잘못 입력하였습니다.");
@@ -45,8 +46,9 @@ public class Main{
 		}
 		System.out.println("아이디를 입력하세요.");
 		selChar.setId(sc.next());
-		sc.close();
 		System.out.println();
 		selChar.start();
+		sc.close();
+		Char.sc.close();
 	}
 }
