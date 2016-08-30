@@ -38,6 +38,7 @@ public class Healer extends Char {
 	@Override // 마인드컨트롤
 	public void skill2(Char target){
 		healSp(maxSp);
+		healHp(-50);
 	}
 
 	@Override // 큐어

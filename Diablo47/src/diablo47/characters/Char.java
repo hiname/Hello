@@ -177,12 +177,10 @@ public abstract class Char implements CharAction {
 		ani.rest();
 		int restSp = (int) (Math.random()*50+5);
 		int restHp = (int) (Math.random() * 500 + 50);
-		hp += restHp;
-		if (hp > maxHp)
-			hp = maxHp;
-		sp += restSp;
-		if (sp > maxSp)
-			sp=maxSp;
+		healHp(restHp);
+		
+		healSp(restSp);
+		
 		System.out.println(id + "은(는) " + restHp + "의 HP를 회복하였다.");
 		System.out.println(id + "은(는) " + restSp + "의 Sp를 회복하였다.");
 		printStat();
@@ -344,12 +342,10 @@ public abstract class Char implements CharAction {
 
 	public void doDefend() {
 		def += addDoDef;
-		sp += addDoSp;
-		if(sp>maxSp){
-			sp=maxSp;
-		}
+		healSp(addDoSp);
+		
 		System.out.println(id + "의 방어력 증가(+" + addDoDef + ") => 현재 : " + def);
-		System.out.println(id + "의 SP 회복(+" + addDoSp + ") => 현재 : " + sp);
+		System.out.println(id + "의 SP : " + sp);
 		System.out.println(id + "의 체력 : " + hp);
 		System.out.println();
 	}
@@ -393,8 +389,8 @@ public abstract class Char implements CharAction {
 	public void healHp(int value){
 		hp += value;
 		if(hp > maxHp) {
-			hp = maxHp;
 			value -= (hp - maxHp); 
+			hp = maxHp;
 		}
 		
 		System.out.println(id + "의 HP " 
@@ -408,8 +404,8 @@ public abstract class Char implements CharAction {
 		sp += value;
 		
 		if(sp > maxSp) {
-			sp = maxSp;
 			value -= (sp - maxSp); 
+			sp = maxSp;
 		}
 		
 		System.out.println(id + "의 SP " 
