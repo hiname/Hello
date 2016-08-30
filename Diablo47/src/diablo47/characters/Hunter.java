@@ -26,7 +26,7 @@ public class Hunter extends Char {
 		lvUpDef = 2;
 		
 		skillNames = new String[] { "적 공격력 낮추기", "적 방어력 낮추기", "회복", "적 공업 방다", "확률 하르마게돈" };
-		skillNeedSps = new int[]{10, 10, 30, 20, 80};
+		skillNeedSps = new int[]{10, 10, 30, 20, maxSp};
 		afterInit();
 		// 공격 / 방어 / 스킬
 		// 				 -> 스킬1 - 스킬5
@@ -44,6 +44,12 @@ public class Hunter extends Char {
 	// healHp(1); // HP 회복 / 감소
 	// healSp(1); // SP 회복 / 감소
 
+	@Override
+	public void levelUp() {
+		super.levelUp();
+		skillNeedSps[4] = maxSp;
+	}
+	
 	@Override
 	public void skill1(Char target){
 		target.buffAtk(-10);
@@ -68,7 +74,7 @@ public class Hunter extends Char {
 	@Override
 	public void skill5(Char target){
 		int death = (int) (Math.random() * 10 + 1);
-		if (death < 5) {
+		if (death < 10) {
 			target.diedInstantly();
 		} else {
 			System.out.println("실패");

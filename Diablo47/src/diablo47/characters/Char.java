@@ -16,7 +16,7 @@ public abstract class Char implements CharAction {
 	public String	id				= null;
 	public String	cls				= null;
 	public String[]	idList			= null;
-
+	public static int 		battleCount;
 	public int		minHp;
 	public int		defaultMaxHp;
 	public int		maxHp;
@@ -158,15 +158,25 @@ public abstract class Char implements CharAction {
 		ani.adventure();
 		int disc = (int) (Math.random() * 10 + 1);
 
-		Char mon = new Mon();
-		
-		int rndMonLevel = level + (int)(Math.random() * 5 - 2);
-		if(rndMonLevel <= 0) rndMonLevel = 1;
-		mon.initLevelUpStat(rndMonLevel);
-		
-		if (disc >= 2)
+		if (disc >= 2) {
+			
+			Char mon = null;
+			
+			battleCount++;
+			
+			if(battleCount >= 10){
+				mon = new Boss();
+				battleCount = 0;
+			} else {
+				mon = new Mon();
+			}
+
+			int rndMonLevel = level + (int)(Math.random() * 5 - 2);
+			if(rndMonLevel <= 0) rndMonLevel = 1;
+			mon.initLevelUpStat(rndMonLevel);
+
 			battle(mon);
-		else {
+		} else {
 			System.out.println(id + "은(는) " + "아무것도 발견하지 못했다.");
 			sleep(500);
 		}
