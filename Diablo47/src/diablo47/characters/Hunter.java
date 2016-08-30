@@ -68,7 +68,7 @@ public class Hunter extends Char {
 	@Override
 	public void skill5(Char target){
 		int death = (int) (Math.random() * 10 + 1);
-		if (death < 3) {
+		if (death < 5) {
 			target.diedInstantly();
 		} else {
 			System.out.println("실패");

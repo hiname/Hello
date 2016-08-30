@@ -43,6 +43,7 @@ public abstract class Char implements CharAction {
 	public int		defRng;
 	public int		lvUpDef;
 	public int		addDoDef;
+	public int 		addDoSp;
 
 	public int		level;
 	public int		exp;
@@ -76,6 +77,7 @@ public abstract class Char implements CharAction {
 		atkRng = (int) (defaultAtk * 0.3);
 		defRng = (int) (defaultDef * 0.3);
 		addDoDef = (int) (defaultDef * 0.3);
+		addDoSp = (int) (defaultMaxSp * 0.3);
 	}
 	
 	public void sleep(long mills) {
@@ -173,12 +175,16 @@ public abstract class Char implements CharAction {
 	@Override
 	public void breakTime() {
 		ani.rest();
+		int restSp = (int) (Math.random()*50+5);
 		int restHp = (int) (Math.random() * 500 + 50);
 		hp += restHp;
 		if (hp > maxHp)
 			hp = maxHp;
-
+		sp += restSp;
+		if (sp > maxSp)
+			sp=maxSp;
 		System.out.println(id + "은(는) " + restHp + "의 HP를 회복하였다.");
+		System.out.println(id + "은(는) " + restSp + "의 Sp를 회복하였다.");
 		printStat();
 		ani.printHp(id + "HP : ", hp, maxHp);
 	}
@@ -338,7 +344,12 @@ public abstract class Char implements CharAction {
 
 	public void doDefend() {
 		def += addDoDef;
+		sp += addDoSp;
+		if(sp>maxSp){
+			sp=maxSp;
+		}
 		System.out.println(id + "의 방어력 증가(+" + addDoDef + ") => 현재 : " + def);
+		System.out.println(id + "의 SP 회복(+" + addDoSp + ") => 현재 : " + sp);
 		System.out.println(id + "의 체력 : " + hp);
 		System.out.println();
 	}
